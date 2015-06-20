@@ -17,9 +17,26 @@ public class StatusButton {
     }
 
     public enum TouchButtonState {
-        BUTTON_DOWN, BUTTON_UP
+        BUTTON_DOWN ("ZAPNUTO"), BUTTON_UP ("VYPNUTO");
+
+
+        private final String name;
+
+        private TouchButtonState (String s) {
+            name = s;
+        }
+
+        public boolean equalsName(String otherName){
+            return (otherName == null)? false:name.equals(otherName);
+        }
+
+        public String toString(){
+            return name;
+        }
     }
 
 
 
 }
+
+

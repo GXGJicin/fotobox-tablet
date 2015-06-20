@@ -10,6 +10,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ResultReceiver;
 
+import cz.geeklab.fotobox_tablet.apps.StatusButton;
+import cz.geeklab.fotobox_tablet.socket.SocketClientTask;
+import cz.geeklab.fotobox_tablet.socket.SocketClientTool;
+
 /**
  * Created by Jaroslav on 20. 6. 2015.
  */
@@ -25,7 +29,7 @@ public class StatusReceiverService extends Service{
             resultReceiver = intent.getParcelableExtra("receiver");
 
             timerTask = new MyTimerTask();
-            timer.scheduleAtFixedRate(timerTask, 1000, 1000);
+            timer.scheduleAtFixedRate(timerTask, 250, 250);
             return START_STICKY;
         }
         @Override
@@ -50,8 +54,10 @@ public class StatusReceiverService extends Service{
             }
             @Override
             public void run() {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("s");
-                resultReceiver.send(Integer.parseInt(dateFormat.format(System.currentTimeMillis())), null);
+                String response = SocketClientTool.getStatusButton("192.168.15.108", 4322);
+                Bundle bundle = new Bundle();
+                bundle.putString("status", response);
+                resultReceiver.send(1050, bundle);
             }
         }
     }

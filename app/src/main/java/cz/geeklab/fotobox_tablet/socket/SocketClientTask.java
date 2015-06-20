@@ -12,69 +12,59 @@ import java.net.UnknownHostException;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
+import cz.geeklab.fotobox_tablet.apps.StatusButton;
+
 
 /**
  * Created by Jaroslav on 20. 6. 2015.
  */
 public class SocketClientTask extends AsyncTask<Void, Void, Void> {
 
-        TextView dsTextResponse;
-        String dstAddress;
-        int dstPort;
-        String response = "";
+    TextView dsTextResponse;
+    StatusButton dsButton;
+    String dstAddress;
+    int dstPort;
+    String response = "";
 
-    public SocketClientTask(TextView textResponse, String addr, int port){
-            dsTextResponse = textResponse;
-            dstAddress = addr;
-            dstPort = port;
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-
-            Socket socket = null;
-
-            try {
-                socket = new Socket(dstAddress, dstPort);
-                DataOutputStream DOS = new DataOutputStream(socket.getOutputStream());
-                DOS.writeUTF("stav");
-
-                InputStream inputStream = socket.getInputStream();
-
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                response = bufferedReader.readLine();
+    public SocketClientTask(TextView textResponse, String addr, int port) {
+        dsTextResponse = textResponse;
+        dsButton = null;
+        dstAddress = addr;
+        dstPort = port;
+    }
 
 
-            } catch (UnknownHostException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                response = "UnknownHostException: " + e.toString();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                response = "IOException: " + e.toString();
-            }finally{
-                if(socket != null){
-                    try {
-                        socket.close();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            if (dsTextResponse != null) {
-                dsTextResponse.setText(response);
-            }
-            super.onPostExecute(result);
-        }
+    public SocketClientTask(StatusButton button, String addr, int port) {
+        dsTextResponse = null;
+        dsButton = button;
+        dstAddress = addr;
+        dstPort = port;
 
     }
+
+    @Override
+    protected Void doInBackground(Void... arg0) {
+
+        this.response = SocketClientTool.getStatusButton(dstAddress, dstPort);
+        return null;
+
+    }
+
+    @Override
+    protected void onPostExecute(Void result) {
+        if (dsTextResponse != null) {
+            dsTextResponse.setText(response);
+        }
+        if (dsButton != null) {
+            if ("ZAPNUTO".startsWith(response)) {
+                dsButton.setState(StatusButton.TouchButtonState.BUTTON_DOWN);
+            } else {
+                dsButton.setState(StatusButton.TouchButtonState.BUTTON_UP);
+            }
+        }
+
+        super.onPostExecute(result);
+    }
+
+}
 

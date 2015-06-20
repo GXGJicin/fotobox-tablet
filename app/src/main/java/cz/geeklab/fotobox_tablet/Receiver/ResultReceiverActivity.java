@@ -80,6 +80,9 @@ public class ResultReceiverActivity extends Activity{
                 else if(resultCode == 200){
                     runOnUiThread(new UpdateUI(resultData.getString("end")));
                 }
+                else if (resultCode == 1050) {
+                    runOnUiThread(new UpdateUI("Button " + resultData.getString("status")));
+                }
                 else{
                     runOnUiThread(new UpdateUI("Result Received "+resultCode));
                 }
