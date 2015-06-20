@@ -4,15 +4,55 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Button;
+import android.view.View;
+import cz.geeklab.fotobox_tablet.socket.SocketClientTask;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    TextView textResponse;
+    EditText editTextAddress, editTextPort;
+    Button buttonConnect, buttonClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final Button button = (Button) findViewById(R.id.TestButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Button pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        editTextAddress = (EditText)findViewById(R.id.address);
+        editTextAddress.setText("192.168.15.108");
+        editTextPort = (EditText)findViewById(R.id.port);
+        buttonConnect = (Button)findViewById(R.id.connect);
+        buttonClear = (Button)findViewById(R.id.clear);
+        textResponse = (TextView)findViewById(R.id.response);
+
+        buttonConnect.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View arg0) {
+                SocketClientTask myClientTask = new SocketClientTask(textResponse,
+                        editTextAddress.getText().toString(),
+                        Integer.parseInt(editTextPort.getText().toString()));
+                myClientTask.execute();
+            }});
+
+        buttonClear.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                textResponse.setText("");
+            }});
     }
+
 
 
     @Override
