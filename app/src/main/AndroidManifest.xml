@@ -18,7 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Receiver.ResultReceiverActivity"
+            android:label="@string/app_ResultRecieveName">
+        </activity>
+
+        <service android:name=".Receiver.StatusReceiverService"></service>
     </application>
+
+
 
     <uses-permission android:name="android.permission.INTERNET" />
 

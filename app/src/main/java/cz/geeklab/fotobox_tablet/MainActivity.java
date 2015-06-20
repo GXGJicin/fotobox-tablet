@@ -1,5 +1,6 @@
 package cz.geeklab.fotobox_tablet;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 import android.view.View;
+
+import cz.geeklab.fotobox_tablet.Receiver.ResultReceiverActivity;
 import cz.geeklab.fotobox_tablet.socket.SocketClientTask;
 
 
@@ -16,7 +19,7 @@ public class MainActivity extends ActionBarActivity {
 
     TextView textResponse;
     EditText editTextAddress, editTextPort;
-    Button buttonConnect, buttonClear;
+    Button buttonConnect, buttonClear, buttonResultReciever;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,14 @@ public class MainActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Button pressed", Toast.LENGTH_SHORT).show();
             }
         });
+
+        buttonResultReciever = (Button)findViewById(R.id.ResultRecieverButton);
+        buttonResultReciever.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View arg0) {
+                ShowResultRecieverActivity(arg0);
+            }});
 
         editTextAddress = (EditText)findViewById(R.id.address);
         editTextAddress.setText("192.168.15.108");
@@ -53,6 +64,11 @@ public class MainActivity extends ActionBarActivity {
             }});
     }
 
+
+    public void ShowResultRecieverActivity (View view) {
+        Intent intent = new Intent(this, ResultReceiverActivity.class);
+        startActivity(intent);
+    }
 
 
     @Override
