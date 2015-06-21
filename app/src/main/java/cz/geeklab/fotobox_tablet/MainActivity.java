@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.view.View;
 
 import cz.geeklab.fotobox_tablet.Receiver.ResultReceiverActivity;
-import cz.geeklab.fotobox_tablet.socket.SocketClientTask;
+import cz.geeklab.fotobox_tablet.socket.SocketStatusButtonTask;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View arg0) {
-                SocketClientTask myClientTask = new SocketClientTask(textResponse,
+                SocketStatusButtonTask myClientTask = new SocketStatusButtonTask(textResponse,
                         editTextAddress.getText().toString(),
                         Integer.parseInt(editTextPort.getText().toString()));
                 myClientTask.execute();

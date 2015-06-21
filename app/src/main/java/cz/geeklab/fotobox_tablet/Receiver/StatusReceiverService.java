@@ -1,6 +1,5 @@
 package cz.geeklab.fotobox_tablet.Receiver;
 
-import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,7 +10,6 @@ import android.os.IBinder;
 import android.os.ResultReceiver;
 
 import cz.geeklab.fotobox_tablet.apps.StatusButton;
-import cz.geeklab.fotobox_tablet.socket.SocketClientTask;
 import cz.geeklab.fotobox_tablet.socket.SocketClientTool;
 
 /**
@@ -54,9 +52,9 @@ public class StatusReceiverService extends Service{
             }
             @Override
             public void run() {
-                String response = SocketClientTool.getStatusButton("192.168.15.108", 4322);
+                StatusButton result = SocketClientTool.getStatusButton("192.168.15.108", 4322);
                 Bundle bundle = new Bundle();
-                bundle.putString("status", response);
+                bundle.putString("status", result.getState().toString());
                 resultReceiver.send(1050, bundle);
             }
         }

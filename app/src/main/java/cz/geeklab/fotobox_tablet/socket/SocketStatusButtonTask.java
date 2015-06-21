@@ -1,14 +1,5 @@
 package cz.geeklab.fotobox_tablet.socket;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import android.os.AsyncTask;
 import android.widget.TextView;
 
@@ -18,7 +9,7 @@ import cz.geeklab.fotobox_tablet.apps.StatusButton;
 /**
  * Created by Jaroslav on 20. 6. 2015.
  */
-public class SocketClientTask extends AsyncTask<Void, Void, Void> {
+public class SocketStatusButtonTask extends AsyncTask<Void, Void, Void> {
 
     TextView dsTextResponse;
     StatusButton dsButton;
@@ -26,7 +17,7 @@ public class SocketClientTask extends AsyncTask<Void, Void, Void> {
     int dstPort;
     String response = "";
 
-    public SocketClientTask(TextView textResponse, String addr, int port) {
+    public SocketStatusButtonTask(TextView textResponse, String addr, int port) {
         dsTextResponse = textResponse;
         dsButton = null;
         dstAddress = addr;
@@ -34,7 +25,7 @@ public class SocketClientTask extends AsyncTask<Void, Void, Void> {
     }
 
 
-    public SocketClientTask(StatusButton button, String addr, int port) {
+    public SocketStatusButtonTask(StatusButton button, String addr, int port) {
         dsTextResponse = null;
         dsButton = button;
         dstAddress = addr;
@@ -45,7 +36,7 @@ public class SocketClientTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... arg0) {
 
-        this.response = SocketClientTool.getStatusButton(dstAddress, dstPort);
+        this.response = SocketClientTool.getResponseStatusButton(dstAddress, dstPort);
         return null;
 
     }
