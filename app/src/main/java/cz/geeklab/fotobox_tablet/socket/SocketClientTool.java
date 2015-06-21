@@ -3,6 +3,7 @@ package cz.geeklab.fotobox_tablet.socket;
 import android.graphics.Bitmap;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,23 +24,7 @@ public class SocketClientTool {
     public static Bitmap getPicture(String addr, int port) {
         Bitmap bitmap = null;
 
-        InputStream is = getPictureStream(addr, port);
-        if (is != null) {
-            try {
-                bitmap = BitmapFactory.decodeStream(is);
-            } finally {
-                try {
-                    is.close();
-                    is = null;
-                } catch (IOException e) {
-                }
-            }
-        }
 
-        return bitmap;
-    }
-
-    public static InputStream getPictureStream(String addr, int port) {
         Socket socket = null;
         InputStream result = null;
         try {
@@ -47,7 +32,31 @@ public class SocketClientTool {
             DataOutputStream DOS = new DataOutputStream(socket.getOutputStream());
             DOS.writeUTF("nahled");
 
-            result = socket.getInputStream();
+            //byte[] bytes = IOUtils.toByteArray();
+            InputStream is =socket.getInputStream();
+            if (is != null) {
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+                int nRead;
+                byte[] data = new byte[16384];
+
+                while ((nRead = is.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, nRead);
+                }
+
+                buffer.flush();
+
+                byte[] bytes = buffer.toByteArray();
+                try {
+                    bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                } finally {
+                    try {
+                        is.close();
+                        is = null;
+                    } catch (IOException e) {
+                    }
+                }
+            }
 
 
         } catch (UnknownHostException e) {
@@ -68,8 +77,12 @@ public class SocketClientTool {
                 }
             }
         }
-        return result;
+
+
+
+        return bitmap;
     }
+
 
     public static String getResponseStatusButton(String addr, int port) {
         Socket socket = null;

@@ -47,10 +47,11 @@ public class ResultReceiverActivity extends Activity{
                 }
             });
 
+/*
             intent = new Intent(this, StatusReceiverService.class);
             intent.putExtra("receiver", resultReceiver);
             startService(intent);
-
+*/
 
         }
 
